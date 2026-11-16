@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Countdown</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      box-sizing: border-box;
+      background-color: #ffffff;
+      color: #323232;
+      text-align: center;
+    }
+    #eventTitle {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #0079c1; /* Esri Blue */
+    }
+    .grid {
+      display: flex;
+      gap: 12px;
+    }
+    .box {
+      background-color: #f3f3f3;
+      border-radius: 6px;
+      padding: 10px 14px;
+      min-width: 58px;
+    }
+    .number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      display: block;
+    }
+    .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #6e6e6e;
+      letter-spacing: 0.5px;
+    }
+    #message {
+      margin-top: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #d83020;
+    }
+  </style>
+</head>
+<body>
+  <div id="eventTitle">Time Until Event</div>
+  <div class="grid" id="countdownGrid">
+    <div class="box"><span class="number" id="days">00</span><span class="label">Days</span></div>
+    <div class="box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
+    <div class="box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+    <div class="box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+  </div>
+  <div id="message"></div>
+
+  <script>
+    // CHANGE THIS DATE AND TIME TO YOUR EVENT (Format: YYYY-MM-DDTHH:MM:SS)
+    const TARGET_DATE = new Date("2026-11-20T12:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = TARGET_DATE - now;
+
+      if (distance <= 0) {
+        document.getElementById("days").textContent = "00";
+        document.getElementById("hours").textContent = "00";
+        document.getElementById("minutes").textContent = "00";
+        document.getElementById("seconds").textContent = "00";
+        document.getElementById("message").textContent = "The event has started!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = String(days).padStart(2, "0");
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
