@@ -27,22 +27,22 @@
     }
     .grid {
       display: flex;
-      gap: 12px;
+      gap: 2px;
     }
     .box {
       background-color: #f3f3f3;
-      border-radius: 6px;
-      padding: 10px 14px;
+      border-radius: 15px;
+      padding: 5px 8px;
       min-width: 58px;
     }
     .number {
-      font-size: 1.8rem;
+      font-size: 1.3rem;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       display: block;
     }
     .label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       color: #6e6e6e;
       letter-spacing: 0.5px;
@@ -56,7 +56,7 @@
   </style>
 </head>
 <body>
-  <div id="eventTitle">Time Until Event</div>
+  <div id="eventTitle"></div>
   <div class="grid" id="countdownGrid">
     <div class="box"><span class="number" id="days">00</span><span class="label">Days</span></div>
     <div class="box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
@@ -67,7 +67,7 @@
 
   <script>
     // CHANGE THIS DATE AND TIME TO YOUR EVENT (Format: YYYY-MM-DDTHH:MM:SS)
-    const TARGET_DATE = new Date("2026-11-20T12:00:00-06:00").getTime();
+    const TARGET_DATE = new Date("2026-11-20T13:00:00-06:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
