@@ -22,7 +22,24 @@
       font-size: 2.2rem;
       font-weight: 600;
       font-variant-numeric: tabular-nums;
+      margin-bottom: 10px;
+    }
+    .start-inputs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
       margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: #6e6e6e;
+    }
+    .start-inputs input {
+      width: 44px;
+      padding: 4px 6px;
+      font-size: 0.9rem;
+      text-align: center;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      font-family: inherit;
     }
     .controls {
       display: flex;
@@ -48,6 +65,14 @@
 </head>
 <body>
   <div id="display">00:00:00</div>
+
+  <div class="start-inputs">
+    <span>Start at:</span>
+    <input type="number" id="inHrs" min="0" max="999" value="0" aria-label="Hours" />h
+    <input type="number" id="inMins" min="0" max="59" value="0" aria-label="Minutes" />m
+    <input type="number" id="inSecs" min="0" max="59" value="0" aria-label="Seconds" />s
+  </div>
+
   <div class="controls">
     <button id="startBtn">Start</button>
     <button id="stopBtn">Stop</button>
@@ -57,8 +82,12 @@
   <script>
     let seconds = 0;
     let timerId = null;
+    let hasStarted = false;
 
     const display = document.getElementById("display");
+    const inHrs = document.getElementById("inHrs");
+    const inMins = document.getElementById("inMins");
+    const inSecs = document.getElementById("inSecs");
     const startBtn = document.getElementById("startBtn");
     const stopBtn = document.getElementById("stopBtn");
     const resetBtn = document.getElementById("resetBtn");
@@ -70,8 +99,30 @@
       return `${hrs}:${mins}:${secs}`;
     }
 
+    function getInputSeconds() {
+      const h = Math.max(0, parseInt(inHrs.value, 10) || 0);
+      const m = Math.max(0, parseInt(inMins.value, 10) || 0);
+      const s = Math.max(0, parseInt(inSecs.value, 10) || 0);
+      return (h * 3600) + (m * 60) + s;
+    }
+
+    // Update the main display immediately as the user types a starting number
+    [inHrs, inMins, inSecs].forEach(input => {
+      input.addEventListener("input", () => {
+        if (!hasStarted && timerId === null) {
+          seconds = getInputSeconds();
+          display.textContent = formatTime(seconds);
+        }
+      });
+    });
+
     startBtn.addEventListener("click", () => {
       if (timerId !== null) return;
+      if (!hasStarted) {
+        seconds = getInputSeconds();
+        display.textContent = formatTime(seconds);
+        hasStarted = true;
+      }
       timerId = setInterval(() => {
         seconds++;
         display.textContent = formatTime(seconds);
@@ -86,8 +137,9 @@
     resetBtn.addEventListener("click", () => {
       clearInterval(timerId);
       timerId = null;
-      seconds = 0;
-      display.textContent = "00:00:00";
+      hasStarted = false;
+      seconds = getInputSeconds();
+      display.textContent = formatTime(seconds);
     });
   </script>
 </body>
